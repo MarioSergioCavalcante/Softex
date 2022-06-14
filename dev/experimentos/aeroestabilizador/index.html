@@ -2,9 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Experimento 1 - Aeroestabilizador</title>
+    <style>
+            body{
+                margin: 0;
+                padding: 0;
+            }
+            #btns{
+                position: absolute;
+                right: 10px;
+                bottom: 10px;
+            }
+        </style>
 </head>
   <body>
+    <div id="btns">
+        <button id="btn2">Send position</button>
+    </div>
     <script type="module">
             import { App } from './app.js';
 
@@ -12,6 +27,7 @@
                 const app = new App();
                 window.app = app;
             });
-        </script>
+    </script>
+
   </body>
 </html>

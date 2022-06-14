@@ -16,9 +16,8 @@ class App{
 	constructor(){
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
-
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
-        this.camera.position.set(0,0,4);
+        this.camera.position.set(0,0,2);
 
 
         this.scene = new THREE.Scene();
@@ -38,18 +37,61 @@ class App{
 
         this.renderer.setAnimationLoop( this.render.bind(this));
 
-        const geometry = new THREE.BoxBufferGeometry();
-        const material = new THREE.MeshStandardMaterial( { color: 0xff0000 });
+        this.loadExperiment();
 
-        this.mesh = new THREE.Mesh(geometry, material);
 
-        this.scene.add(this.mesh);
 
         const controls = new OrbitControls(this.camera,this.renderer.domElement);
 
+        this.setupXR();
         window.addEventListener('resize', this.resize.bind(this) );
 	}
+	loadExperiment(){
+	        this.assetsPath = './';
+    	    const loader = new GLTFLoader().setPath(this.assetsPath);
+    		const self = this;
 
+    		// Load a GLTF resource
+    		loader.load(
+    			// resource URL
+    			`Aeroestabilizador.gltf`,
+    			// called when the resource is loaded
+    			function ( gltf ) {
+    			    gltf.scene.castShadow=true;
+                    self.scene.add(gltf.scene);
+    			},
+    			// called when loading data..
+    			function ( loading ) {
+
+    				console.log( 'loading' );
+
+    			},
+                // called when loading has errors
+                function ( error ) {
+
+                    console.log( 'An error happened' );
+
+                 }
+    		);
+    		this.visible = false
+    }
+    setupXR(){
+        navigator.xr.isSessionSupported( 'immersive-ar' ).then( ( supported ) => {
+
+        				supported ? this.initScene : this.noARScene();
+
+        			} );
+
+    }
+    initScene(){
+        this.dummyCam = new THREE.Object3D();
+        this.camera.add( this.dummyCam );
+        this.mesh.position.set( 0, -0.5, -1.1 );
+        this.camera.add( self.mesh );
+    }
+    noARScene(){
+
+    }
     resize(){
         this.camera.aspect = window.innerWidth/window.innerHeight;
         this.camera.updateProjectionMatrix();
