@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='pt-BR'>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <title>Experiência em Realidade Aumentada</title>
+  <script src="aframe-1-0-4.js"></script>
+  <script src="aframe-look-at-component-min.js"></script>
+  <script src="aframe-ar-min.js"></script>
+  <script src="interface-helper.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+  
+<a-scene
+          vr-mode-ui="enabled: false"
+          embedded
+          arjs="sourceType: webcam; debugUIEnabled: false;  detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+>
+  <a-marker type="barcode" value="6">
+    <a-text position="4 0 0" scale ="5 5 5" color="black" value="0cm" look-at="[camera]"></a-text>
+    <a-text position="4 0 -6" scale ="5 5 5" color="black" value="30cm" look-at="[camera]"></a-text>
+    <a-text position="4 0 7" scale ="5 5 5" color="blue" value="0cm" look-at="[camera]"></a-text>
+    <a-text position="4 0 1" scale ="5 5 5" color="blue" value="30cm" look-at="[camera]"></a-text>           
+  </a-marker>
+
+  <a-marker type="barcode" value="1">
+    <a-text position="4 0 0" scale ="4 4 4" color="black" value="0cm" look-at="[camera]"></a-text>
+    <a-text position="4 0 -6"  scale ="4 4 4" color="black" value="30cm" look-at="[camera]"></a-text>
+    <a-text position="4 0 -7" scale ="4 4 4" color="blue" value="0cm" look-at="[camera]"></a-text>
+    <a-text position="4 0 -13" scale ="4 4 4" color="blue" value="30cm" look-at="[camera]"></a-text>     
+  </a-marker>
+  
+  <a-marker type="barcode" value="1">
+    
+  </a-marker>
+  <a-entity camera></a-entity>
+</a-scene>
+<div class="control-input" >
+  <form onclick="sendPos(this.tankslider.value)">
+    <label for="tank-1">Nível do tanque</label><br>
+    <input type="range" id="tankslider" value="0" min="0" max="30" oninput="updateNumberBox(this.value)"/>
+    <input type="number" id="numberbox" value="0" min="0" max="30" oninput="updateSlider(this.value)"/>
+    <button type="button" >Enviar</button>
+     <!--<input type="submit" value="Enviar">-->
+    
+  </form>   
+</div>
+
+</body>
+</html>
