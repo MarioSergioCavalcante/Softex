@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset= "UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Sistemas de Tanques </title>
+<script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous">
+</script>
+  <script src = https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js></script>
+   <link rel = "stylesheet" href=" styles.css">
+</head>
+
+ <style>
+  .bottom-three {
+     margin-bottom: 3cm;
+  }
+</style>
+<p class="bottom-three">
+  
+</p>
+<table class = "tg">
+  <thead>
+    <tr> </tr>
+    <tr>
+      <th class="tg-bolj">Tanque</th>
+      <th class="tg-bolj">Nivel (cm)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tg-c3ow">Tanque 1:</td>
+      <td class="tg-c3ow"><p id = "tank1"></p></td>
+    </tr>
+    <tr>
+      <td class="tg-c4ww">Tanque 2:</td>
+      <td class="tg-c4ww"><p id = "tank2"></p></td>
+    </tr>
+   
+  </tbody>
+  </table>
+  <div style="text-align:center;">
+    <tr><button onclick="Teste2()" class = "center"> XMLRequest</button> </tr>
+ </div>
+ <p class="bottom-three">
+  
+</p>
+ <p>
+  Setpoint (entre 0 e 30): <span id="valBox" onload = "getValue()">15</span>
+</p>
+<p>
+
+  <input type="range" id="Setpoint" name="Setpoint" min="0" max="30" class = "slider" oninput="showVal(this.value)" onchange="showVal(this.value)">
+  <div style="text-align:center;">
+
+  <button onclick="Recebe()" class = "center"> Fetch</button>
+</div>
+
+</p>
+
+
+<script>
+    var MyInterval;
+    function Recebe(){
+        MyInterval = setInterval(function(){
+        var Texto =  document.getElementById("valBox").textContent;
+    
+        var Url = "http://192.168.1.69:8080?setpoint=" + Texto;
+        fetch(Url)
+            .then(response => {
+                console.log('Response', response)
+                return response.json()
+            })
+            .then(data => {
+                console.log(data)
+                var stringData = JSON.stringify(data).split("|");
+                document.getElementById("tank1").innerHTML = stringData[1];
+                document.getElementById("tank2").innerHTML = stringData[3];
+            })
+            .catch(error => {console.log(error)
+                clearInterval(MyInterval);
+            })
+    },100);
+  }
+  
+  
+  function Teste2(){
+    MyInterval = setInterval(function(){
+    var Texto =  document.getElementById("valBox").textContent;
+    var Url = "http://192.168.1.69:8080?setpoint=" + Texto;
+    xmlHttp = new XMLHttpRequest(); 
+    xmlHttp.open( "GET", Url, false );
+    xmlHttp.send(  );
+    var stringData = xmlHttp.responseText.split("|");
+       
+        document.getElementById("tank1").innerHTML = stringData[1];
+        document.getElementById("tank2").innerHTML = stringData[3];    },100);
+  }
+  function getValue(){
+    document.getElementById("valBox").innerHTML = document.getElementById("Setpoint").value
+  }
+
+  function showVal(newVal) {
+    document.getElementById("valBox").innerHTML = newVal;
+    }
+
+
+</script>
+</html>
