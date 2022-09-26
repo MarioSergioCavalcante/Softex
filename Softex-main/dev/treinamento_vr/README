@@ -1,0 +1,11 @@
+# Generate crt and key certificate (ubuntu): 
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
+
+# To build:
+
+docker build . -t httpd
+
+# To run:
+
+docker run -it -p 443:443 -p:8080:80 -v C:\Users\allan\Dropbox\prg_new\httpd\PROJETOS\TreinamentoVirtualUFAL/public-html:/usr/local/apache2/htdocs/ httpd
