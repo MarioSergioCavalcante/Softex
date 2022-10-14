@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang='pt-BR'>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <title>Experiência em Realidade Aumentada</title>
+  <script type="application/javascript" src="js/aframe-1.0.4.js"></script>
+  <script type="application/javascript" src="js/aframe-look-at-component.min.js"></script>
+  <script type="application/javascript" src="js/aframe-ar.min.js"></script>
+  <script type="application/javascript" src="js/communication.js"></script> 
+  <script type="application/javascript" src="js/axios.min.js"></script> 
+  <script
+  type="application/javascript" src="js/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
+  <script type="application/javascript" src="js/socket.io.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+  
+<a-scene
+          vr-mode-ui="enabled: false"
+          embedded
+          arjs="sourceType: webcam; debugUIEnabled: false;  detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+>
+<a-marker type="barcode" value="6">
+  <!--Tanque 1-->
+  <a-text position="4 0 -0.5" scale ="5 5 5" color="black" value="0cm" rotation = "-90 0 0 "></a-text>
+  <a-text id="tankpointer-A" position="4 0.3 -0.5" scale ="4 4 4" color="green" value="0cm" rotation="-90 0 0"></a-text>
+ 
+  <a-text position="4 0 -6" scale ="5 5 5" color="black" value="30cm" rotation="-90 0 0"></a-text>
+  <!--Tanque 2-->
+  <a-text position="4 0 6.7"  scale ="5 5 5" color="blue" value="0cm" rotation="-90 0 0"></a-text>
+  <a-text id="tankpointer-B" position="4 0.3 6.7" scale ="4 4 4" color="red" value="0cm" rotation="-90 0 0"></a-text>   
+  <a-text position="4 0 0.85"  scale ="5 5 5" color="blue" value="30cm" rotation="-90 0 0"></a-text>
+  
+  
+</a-marker>
+
+  <a-entity camera></a-entity>
+</a-scene>
+<div class="control-input" >
+  <p>
+    Setpoint (entre 0 e 30): <span id="valBox" onload = "getValue()">15</span>
+  </p>
+  <p>
+
+    <input type="range" id="Setpoint" name="Setpoint" min="0" max="30" class = "slider" oninput="showVal(this.value)" onchange="showVal(this.value)">
+    
+    <div style="text-align:center;">
+      <tr><button onclick="Connect()" class = "center"> Conectar</button> </tr>
+    </div>
+  </p>
+  
+</div>
+</body>
+<script>
+function updateTankOne(val){
+  var sceneEl=document.querySelector('a-scene');
+  var tankV=sceneEl.querySelector('#tankpointer-A');
+  var nVal = String(val+" cm");
+  tankV.setAttribute('value', nVal);
+  tankV.setAttribute('position',{x:4,y:0, z:((((-1)*(11/60)*val))-0.5)});
+}
+
+function updateTankTwo(val){
+  var sceneEl=document.querySelector('a-scene');
+  var tankV=sceneEl.querySelector('#tankpointer-B');
+  var nVal = String(val+" cm");
+  tankV.setAttribute('value', nVal);
+  tankV.setAttribute('position',{x:4,y:0, z:(((-0.195*val))+6.7)});
+}
+
+  var MyInterval;
+function Recebe(){
+    MyInterval = setInterval(function(){
+    var Texto =  document.getElementById("valBox").textContent;
+
+
+    //var Url = "http://127.0.0.1:8080?setpoint=" + Texto;
+    //var Url = "http://172.17.112.1:8080?setpoint=" + Texto;
+    fetch(Url )
+          .then((response) => response.text())
+          .then((data) => {
+            console.log(data);
+            updateTankOne(data[1]);
+            updateTankTwo(data[3]);
+          });
+
+//        .catch(error => {console.log(error)
+//            clearInterval(MyInterval);
+//        });
+},100);
+}
+
+function Connect(){
+  MyInterval = setInterval(function(){
+  var Texto =  document.getElementById("valBox").textContent;
+  //var Url = "http://127.0.0.1:8080?setpoint=" + Texto;
+  var Url ="http://172.20.9.110:8080?setpoint=" + Texto;
+  xmlHttp = new XMLHttpRequest(); 
+  
+  xmlHttp.open( "GET", Url, false );
+  xmlHttp.setRequestHeader('Strict-Transport-Security', 'max-age=0; includeSubDomains');
+  xmlHttp.setRequestHeader('Access-Control-Allow-Origin', '*');
+  
+  xmlHttp.send(Texto);
+  var stringData = xmlHttp.responseText.split("|");
+  console.log(stringData);
+  updateTankOne(stringData[1]);
+  updateTankTwo(stringData[3]);},100);
+}
+
+function getValue(){
+document.getElementById("valBox").innerHTML = document.getElementById("Setpoint").value;
+}
+
+function showVal(newVal) {
+document.getElementById("valBox").innerHTML = newVal;
+}
+</script>
+</html>
