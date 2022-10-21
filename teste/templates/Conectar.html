@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset= "UTF-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+
+<title> Sistemas de Tanques </title>
+<script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous">
+</script>
+<link rel = "stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+</head>
+<style>
+    .bottom-three {
+       margin-bottom: 3cm;
+    }
+  </style>
+  <style>
+    .bottom-three {
+       margin-bottom: 3cm;
+    }
+  </style>
+  <p class="bottom-three">
+    
+  </p>
+  <table class = "tg">
+    <thead>
+      <tr> </tr>
+      <tr>
+        <th class="tg-bolj">Tanque</th>
+        <th class="tg-bolj">Nivel (cm)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-c3ow">Tanque 1:</td>
+        <td class="tg-c3ow"><p id = "tank1">{{tank1}}</p></td>
+      </tr>
+      <tr>
+        <td class="tg-c4ww">Tanque 2:</td>
+        <td class="tg-c4ww"><p id = "tank2"></p>{{tank2}}</td>
+      </tr>
+     
+    </tbody>
+    </table>
+   
+    
+  </p>
+  
+
+  <form method="post" id="myForm" action="/Conectar">
+    <p>
+      Setpoint (entre 0 e 30): <span id="valBox">{{tank2}}</span>
+    </p>
+    <p>
+        <input type="range" id="Setpoint" name="Setpoint" min="0" max="30" value="{{tank2}}"  class = "slider" oninput="showVal(this.value)"  onchange="showVal(this.value)">
+    </p>
+    <div class="container">
+      <div class="center">
+        <button type="submit" width="100%" name="Enviar">Enviar</button>
+
+      </div>
+    </div>
+</form>
+<script>
+   window.onload=function(){
+        //var auto = setTimeout(function(){ autoRefresh(); }, 100);
+
+        function submitform(){
+          document.forms["myForm"].submit();
+        }
+
+        //function autoRefresh(){
+        //   clearTimeout(auto);
+        //   auto = setTimeout(function(){ submitform(); autoRefresh(); }, 200);
+        //}
+    }
+  function showVal(newVal) {
+    document.getElementById("valBox").innerHTML = newVal;
+    }
+
+
+</script>
+</html>
+
+</html>
