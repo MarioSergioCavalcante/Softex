@@ -18,21 +18,6 @@ if __name__ == "__main__":
 def home():
     return render_template("start.html") 
 
-#@app.route("/index", methods= ['GET','POST'])
-#def ConectarPagina():
-#    setpoint = request.form["Setpoint"]
-    #print(f'Setpoint: {setpoint}') valor numerico
-#    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#    sock.connect((local,8080))
-    #print(f'Encode: {setpoint.encode()}') valor codificado
-#    from_server = sock.recv(4096)
-#    from_server = sock.recv(4096)
-#    sock.send(setpoint.encode()+b'\n\r\n\r')
-#    aux = str(from_server).split("|")
-    #print(f'Aux: {aux}') string de resposta
-#    sock.close()
-    
-#    return render_template("index.html",tank1 = aux[1],tank2 = aux[3], setpoint_atual = setpoint)
 
 @app.route("/index")
 def ConectarPagina():

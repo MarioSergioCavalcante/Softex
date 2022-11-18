@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hands Tech</title>
-        <link rel="stylesheet" type="text/css" href= "{{url_for('static', filename='start.css')}}"/>
+        <link rel="stylesheet" href="./style.css">
 
     </head>
     <body>
@@ -13,7 +13,10 @@
         <header>
             <div class = "header-content">
                 <h2>CONTROLE TODOS OS EQUIPAMENTOS EM SUAS MÃOS</h2>
-                <a action="/index" href="/index" class="ctn">Acessar</a>
+                <form href="#" class="ctn" action="/index">
+                    <input type="submit" value="Acessar" />
+                </form>
+                <!-- <a href="#" class="ctn">Acessar</a> -->
             </div>
             <!-- <div class="botton-content">
                 <img = url(.\image\bras_o_ufal_1.png)></img>
@@ -22,6 +25,6 @@
     </body>
 </html>
 
-<!-- <form action="/index">
+<form action="/index">
     <input type="submit" value="experimento" />
-</form> -->
+</form>

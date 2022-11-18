@@ -7,14 +7,12 @@
 
   <title>Experiência em Realidade Aumentada</title>
   
+  
   <script type="application/javascript" src="{{ url_for('static', filename='aframe-1.0.4.js')}}"></script>
   <script type="application/javascript" src="{{url_for('static', filename='aframe-look-at-component.min.js')}}"></script>
   <script type="application/javascript" src="{{url_for('static', filename='aframe-ar.min.js')}}"></script>
   <script type="application/javascript" src="{{url_for('static', filename='communication.js')}}"></script> 
-  <script src="{{url_for('static', filename='jquery-3.6.1.min.js')}}"
-  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-  crossorigin="anonymous"></script>
-  <script src="{{url_for('static', filename='socket.io.js')}}"></script>
+  
   <link rel="stylesheet" type="text/css" href= "{{url_for('static', filename='style.css')}}"/>
 </head>
 
@@ -41,14 +39,14 @@
 
   <a-entity camera></a-entity>
 </a-scene>
-<div class='wrapper'>
+<div class='control'>
 
   <p>
     Setpoint (entre 0 e 30): <span id="valBox2"></span>
   </p>
 
   <p>
-    <input type="range" id="setpoint2" name="Setpoint2" min="0" max="30"   class = "slider" oninput="showVal2(this.value)"  onchange="showVal2(this.value)" list="my-datalist"/>
+    <input type="range" id="setpoint2" name="Setpoint2" min="0" max="30"   class = "slider" oninput="showVal3(this.value)"  onchange="showVal3(this.value)" list="my-datalist"/>
     <datalist id="my-datalist" style="--list-length: 7;"><!--
       ---><option>0</option><!--
       ---><option>5</option><!--
@@ -59,13 +57,12 @@
       ---><option>30</option><!--
      ---></datalist>
 </p>
-<div class='result'></div>  
-<button class='Calcular'>Calculate</button>
+<p><button id='ctrlbutton' class='Calcular'>Conectar</button></p>
 </div>
+  
 </body>
 <script>
- 
-
+var button = setInterval(showVal3,400,document.getElementById("setpoint2").value);
 function updateTankOne(val){
   var sceneEl=document.querySelector('a-scene');
   var tankV=sceneEl.querySelector('#tankpointer-A');
@@ -82,36 +79,26 @@ function updateTankTwo(val){
   tankV.setAttribute('position',{x:4,y:0, z:(((-0.195*val))+6.7)});
 }
 
-
-function getValue(){
-document.getElementById("valBox").innerHTML = document.getElementById("Setpoint").value;
-}
-
-function showVal(newVal) {
-document.getElementById("valBox").innerHTML = newVal;
-}
-function showVal2(newVal) {
-    document.getElementById("valBox2").innerHTML = newVal;
-    }
- $(document).ready(function(){
-      $('.wrapper').on('click', '.Calcular', function(){
-         var setpoint = document.getElementById("setpoint2").value;
-         console.log(setpoint)
-         $.ajax({
-          url: "/calculate_result",
-          type: "post",
-          data: {Setpoint: setpoint},
-          success: function(response) {
-          $(".result").html('<p>'+response.result.toString()+'</p>');
-          var aux = response.result.toString();
-          aux = aux.split("|");
-          console.log(aux);
-          updateTankOne(aux[1]);
-          updateTankOne(aux[3]);
-          },
-         });
-      });
-    });
-
+  function showVal3(newVal){
+    
+    
+    var setpoint = document.getElementById("setpoint2").value;
+    document.getElementById("valBox2").innerHTML = setpoint;
+    var url = 'https://172.20.9.110:5000/calculate_result'
+    var data ='Setpoint='+setpoint
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState==4){
+        if (xhr.status == 200){
+            var stringData = xhr.responseText.split("|");
+            updateTankOne(stringData[1]);
+            updateTankTwo(stringData[3]);
+        }
+      }
+    };
+    xhr.send(data);
+  }
 </script>
 </html>
