@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify
 import socket
-import requests
 
 celpeu = '172.20.10.4'
 pclab = '172.20.9.110'

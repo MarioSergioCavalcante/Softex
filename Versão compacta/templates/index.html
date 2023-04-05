@@ -8,9 +8,12 @@
   <title>Experiência em Realidade Aumentada</title>
   
   
-  <script type="application/javascript" src="{{ url_for('static', filename='aframe-1.0.4.js')}}"></script>
+  <!-- <script type="application/javascript" src="{{ url_for('static', filename='aframe-1.0.4.js')}}"></script> -->
+  <script type="application/javascript" src="{{ url_for('static', filename='aframe-v1.4.1.js')}}"></script>
+  
   <script type="application/javascript" src="{{url_for('static', filename='aframe-look-at-component.min.js')}}"></script>
-  <script type="application/javascript" src="{{url_for('static', filename='aframe-ar.min.js')}}"></script>
+  <!-- <script type="application/javascript" src="{{url_for('static', filename='aframe-ar.min.js')}}"></script> -->
+  <script type="application/javascript" src="{{url_for('static', filename='aframe-ar.js')}}"></script>
   <script type="application/javascript" src="{{url_for('static', filename='communication.js')}}"></script> 
   
   <link rel="stylesheet" type="text/css" href= "{{url_for('static', filename='style.css')}}"/>
@@ -23,7 +26,7 @@
           embedded
           arjs="sourceType: webcam; debugUIEnabled: false;  detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
 >
-<a-marker type="barcode" value="6">
+<a-marker type="barcode" value="0" smooth="true" >
   <!--Tanque 1-->
   <a-text position="4 0 -0.5" scale ="5 5 5" color="black" value="0cm" rotation = "-90 0 0 "></a-text>
   <a-text id="tankpointer-A" position="4 0.3 -0.5" scale ="4 4 4" color="green" value="0cm" rotation="-90 0 0"></a-text>
